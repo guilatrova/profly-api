@@ -151,3 +151,5 @@ dmypy.json
 .prof
 
 .vscode
+
+schema.graphql

@@ -1,0 +1,7 @@
+#!/bin/bash
+
+readonly INPUT="saveio.schema.schema"
+readonly OUTPUT="schema.graphql"
+readonly MANAGE_PATH="saveio/manage.py"
+
+python "$MANAGE_PATH" graphql_schema --schema "$INPUT" --out "$OUTPUT"
