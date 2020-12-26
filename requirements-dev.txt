@@ -1,3 +1,4 @@
+djangorestframework==3.12.2
 black
 flake8
 isort
