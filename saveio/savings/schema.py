@@ -3,7 +3,7 @@ from graphene_django import DjangoListField, DjangoObjectType
 from graphene_django.rest_framework.mutation import SerializerMutation
 
 from .models import Stock, Transaction
-from .serializers import StockSerializer
+from .serializers import StockSerializer, TransactionSerializer
 
 
 class StockType(DjangoObjectType):
@@ -36,8 +36,15 @@ class StockMutation(SerializerMutation):
         model_operations = ["create"]
 
 
+class TransactionMutation(SerializerMutation):
+    class Meta:
+        serializer_class = TransactionSerializer
+        model_operations = ["create"]
+
+
 class Mutation(graphene.ObjectType):
     stocks = StockMutation.Field()
+    transactions = TransactionMutation.Field()
 
 
 schema = graphene.Schema(query=Query, mutation=Mutation)
