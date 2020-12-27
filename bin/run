@@ -1,0 +1,5 @@
+#!/bin/bash
+
+readonly MANAGE_PATH="saveio/manage.py"
+
+python "$MANAGE_PATH" runserver
