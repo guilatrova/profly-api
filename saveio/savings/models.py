@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 
 
 class MonetaryField(models.DecimalField):
@@ -10,7 +11,7 @@ class MonetaryField(models.DecimalField):
 
 class Stock(models.Model):
     name = models.CharField(max_length=100)
-    ticker = models.CharField(max_length=10)
+    ticker = models.CharField(max_length=10, unique=True)
 
 
 class Transaction(models.Model):
@@ -19,4 +20,5 @@ class Transaction(models.Model):
     strike_price = MonetaryField()
     units = models.IntegerField()
 
-    created_at = models.DateField(auto_now=True)
+    performed_at = models.DateTimeField(default=timezone.now)
+    created_at = models.DateTimeField(auto_now=True)
