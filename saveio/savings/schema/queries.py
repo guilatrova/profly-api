@@ -15,6 +15,11 @@ class TransactionType(DjangoObjectType):
     class Meta:
         model = Transaction
 
+    value = graphene.Float()
+
+    def resolve_value(self, info):
+        return self.value
+
 
 class StockInfoType(graphene.ObjectType):
     """Gathers stock with price at the moment"""
