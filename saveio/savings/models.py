@@ -1,6 +1,8 @@
 from django.db import models
 from django.utils import timezone
 
+from . import managers
+
 
 class MonetaryField(models.DecimalField):
     def __init__(self, *args, **kwargs):
@@ -15,6 +17,8 @@ class Stock(models.Model):
 
 
 class Transaction(models.Model):
+    objects = managers.TransactionManager()
+
     stock = models.ForeignKey(Stock, on_delete=models.PROTECT)
     strike_price = MonetaryField()
     units = models.IntegerField()
