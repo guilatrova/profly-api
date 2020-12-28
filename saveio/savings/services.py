@@ -1,5 +1,5 @@
 import logging
-from typing import Optional
+from typing import Iterable, Optional
 
 import yfinance
 
@@ -53,11 +53,11 @@ class ChartDataFactory:
     def __init__(self):
         self.market_service = StocksMarketService()
 
-    def build_stock_units_current_value(self) -> StockUnitsByTicker:
+    def build_stock_units_current_value(self) -> Iterable[StockUnitsByTicker]:
         aggregated_data = Transaction.objects.aggregate_units_by_ticker()
         for units_by_ticker in aggregated_data:
             ticker = units_by_ticker["ticker"]
             history = next(self.market_service.get_history_from_ticker(ticker))
             yield StockUnitsByTicker(
-                ticker, units_by_ticker["total_units"], history.close_price
+                ticker, units_by_ticker["total_units"], history.close
             )

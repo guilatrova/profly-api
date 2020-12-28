@@ -1,5 +1,7 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import datetime
+
+ROUND_DIGITS = 2
 
 
 @dataclass
@@ -26,7 +28,8 @@ class StockUnitsByTicker:
     ticker: str
     total_units: float
     close_price: float
+    total_value: float = field(init=False)
 
-    @property
-    def total_value(self):
-        return self.close_price * self.total_units
+    def __post_init__(self):
+        self.close_price = round(self.close_price, ROUND_DIGITS)
+        self.total_value = self.close_price * self.total_units
