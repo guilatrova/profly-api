@@ -1,3 +1,4 @@
+from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import F, Manager, Sum
 
 
@@ -9,3 +10,13 @@ class TransactionManager(Manager):
             .annotate(total_units=Sum("units"))
             .filter(total_units__gt=0)
         )
+
+
+class StockManager(Manager):
+    def find(self, ticker: str):
+        try:
+            stock = self.get(ticker=ticker)
+        except ObjectDoesNotExist:
+            stock = None
+
+        return stock

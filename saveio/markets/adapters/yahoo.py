@@ -24,15 +24,15 @@ class YahooFactory:
 
         return StockInfo(**data)
 
-    def build_stock_history(self, ticker: str, payload: dict) -> StockHistory:
+    def build_stock_history(self, ticker: str, payload: dict) -> Iterable[StockHistory]:
         for date, values in payload.iterrows():
             yield StockHistory(
                 ticker, date, values["Open"], values["High"], values["Close"]
             )
 
-    def get_last_close_price(self, payload: dict) -> float:
-        for _, values in payload.iterrows():
-            return values["Close"]
+    def get_last_close_price(self, history: Iterable[StockHistory]) -> float:
+        for entry in history:
+            return entry.close
 
 
 class YahooAdapter:

@@ -12,8 +12,15 @@ class MonetaryField(models.DecimalField):
 
 
 class Stock(models.Model):
-    name = models.CharField(max_length=100)
+    objects = managers.StockManager()
+
     ticker = models.CharField(max_length=10, unique=True)
+    name = models.CharField(max_length=100)
+    currency = models.CharField(max_length=10)
+    logo_url = models.URLField(blank=True)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
 
 class Transaction(models.Model):
@@ -21,10 +28,10 @@ class Transaction(models.Model):
 
     stock = models.ForeignKey(Stock, on_delete=models.PROTECT)
     strike_price = MonetaryField()
-    units = models.IntegerField()
+    units = models.FloatField()  # units can be broken in fractions
 
     performed_at = models.DateTimeField(default=timezone.now)
-    created_at = models.DateTimeField(auto_now=True)
+    created_at = models.DateTimeField(auto_now_add=True)
 
     @property
     def value(self):

@@ -21,13 +21,10 @@ class TransactionSerializer(serializers.ModelSerializer):
     ticker = serializers.CharField(write_only=True)
 
     def validate_ticker(self, raw_ticker):
-        ticker_info = market_service.get_stock_info(raw_ticker)
-        stock = None
+        stock = market_service.get_stock(raw_ticker)
 
-        if ticker_info:
-            stock, created = Stock.objects.get_or_create(
-                ticker=ticker_info.ticker, defaults={"name": ticker_info.name}
-            )
+        if not stock:
+            raise serializers.ValidationError(f"{raw_ticker} not found")
 
         return stock
 
