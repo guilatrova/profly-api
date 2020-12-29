@@ -1,7 +1,19 @@
+import math
 from dataclasses import dataclass, field
 from datetime import datetime
+from typing import Optional
 
 ROUND_DIGITS = 2
+
+
+def _handle_nan(raw, do_round=True):
+    if math.isnan(raw):
+        return None
+
+    if do_round:
+        return round(raw, ROUND_DIGITS)
+
+    return raw
 
 
 @dataclass
@@ -18,9 +30,14 @@ class StockInfo:
 class StockHistory:
     ticker: str
     date: str
-    open: float
-    high: float
-    close: float
+    open: Optional[float]
+    high: Optional[float]
+    close: Optional[float]
+
+    def __post_init__(self):
+        self.open = _handle_nan(self.open)
+        self.high = _handle_nan(self.high)
+        self.close = _handle_nan(self.close)
 
 
 @dataclass

@@ -44,9 +44,9 @@ class StockUnitsCurrentValueType(graphene.ObjectType):
 class StockValueHistory(graphene.ObjectType):
     ticker = graphene.String()
     date = graphene.Date()
-    open = graphene.String()
-    high = graphene.String()
-    close = graphene.String()
+    open = graphene.Float()
+    high = graphene.Float()
+    close = graphene.Float()
 
 
 class Query(graphene.ObjectType):
