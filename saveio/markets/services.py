@@ -1,9 +1,9 @@
-from typing import Optional
+from typing import Iterable, Optional
 
 from savings.models import Stock
 
 from .adapters import YahooAdapter
-from .dtos import StockInfo
+from .dtos import StockHistory, StockInfo
 
 
 class StocksMarketService:
@@ -47,5 +47,7 @@ class StocksMarketService:
             stock.name, stock.ticker, stock.currency, price, stock.logo_url
         )
 
-    def get_history(self, ticker_symbol: str, period: str = "1d"):
+    def get_history(
+        self, ticker_symbol: str, period: str = "1d"
+    ) -> Iterable[StockHistory]:
         return self.adapter.get_history(ticker_symbol, period)
