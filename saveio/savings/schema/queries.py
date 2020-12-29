@@ -49,6 +49,11 @@ class StockValueHistory(graphene.ObjectType):
     close = graphene.Float()
 
 
+class StockTransactionsValueHistory(graphene.ObjectType):
+    history = graphene.List(StockValueHistory)
+    transactions = graphene.List(TransactionType)
+
+
 class Query(graphene.ObjectType):
     # Models
     stocks = DjangoListField(StockType)
@@ -64,6 +69,12 @@ class Query(graphene.ObjectType):
     stocks_units_current_value = graphene.List(StockUnitsCurrentValueType)
     stock_value_history = graphene.List(
         StockValueHistory,
+        ticker=graphene.String(),
+        period=graphene.String(),
+        interval=graphene.String(),
+    )
+    stock_transactions_value_history = graphene.Field(
+        StockTransactionsValueHistory,
         ticker=graphene.String(),
         period=graphene.String(),
         interval=graphene.String(),
@@ -84,3 +95,9 @@ class Query(graphene.ObjectType):
 
     def resolve_stock_value_history(root, info, ticker, period, interval):
         return list(data_factory.build_stock_line_factory(ticker, period, interval))
+
+    def resolve_stock_transactions_value_history(root, info, ticker, period, interval):
+        history = list(data_factory.build_stock_line_factory(ticker, period, interval))
+        transactions = Transaction.objects.filter(stock__ticker=ticker)
+
+        return StockTransactionsValueHistory(history, transactions)
