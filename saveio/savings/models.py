@@ -36,4 +36,4 @@ class Transaction(models.Model):
     @property
     def value(self):
         modifier = 1 if self.units > 0 else -1
-        return self.strike_price * self.units * modifier
+        return float(self.strike_price) * self.units * modifier
