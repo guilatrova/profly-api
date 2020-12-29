@@ -1,7 +1,8 @@
 from rest_framework import serializers
 
+from markets.services import StocksMarketService
+
 from .models import Stock, Transaction
-from .services import StocksMarketService
 
 market_service = StocksMarketService()
 
@@ -20,7 +21,7 @@ class TransactionSerializer(serializers.ModelSerializer):
     ticker = serializers.CharField(write_only=True)
 
     def validate_ticker(self, raw_ticker):
-        ticker_info = market_service.get_from_ticker(raw_ticker)
+        ticker_info = market_service.get_stock_info(raw_ticker)
         stock = None
 
         if ticker_info:

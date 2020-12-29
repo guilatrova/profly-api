@@ -1,7 +1,8 @@
 import graphene
 from graphene_django import DjangoListField, DjangoObjectType
+from markets.factories import ChartDataFactory
+from markets.services import StocksMarketService
 from savings.models import Stock, Transaction
-from savings.services import ChartDataFactory, StocksMarketService
 
 market_service = StocksMarketService()
 data_factory = ChartDataFactory()
@@ -57,7 +58,7 @@ class Query(graphene.ObjectType):
         return Transaction.objects.get(pk=id)
 
     def resolve_stock_current_info(root, info, ticker):
-        info = market_service.get_from_ticker(ticker)
+        info = market_service.get_stock_info(ticker)
         return info
 
     def resolve_stocks_units_current_value(root, info):
