@@ -54,10 +54,10 @@ class YahooAdapter:
             return self.factory.build_stock_info(info)
 
     def get_history(
-        self, ticker_symbol: str, period: str = "1d"
+        self, ticker_symbol: str, period: str, interval: str
     ) -> Iterable[StockHistory]:
         try:
-            history = yfinance.Ticker(ticker_symbol).history(period)
+            history = yfinance.Ticker(ticker_symbol).history(period, interval)
             logger.info(f"Got history: {history}")
         except Exception:
             logger.exception(f"Unable to get ticker '{ticker_symbol}'")

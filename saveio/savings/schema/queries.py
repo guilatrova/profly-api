@@ -41,15 +41,33 @@ class StockUnitsCurrentValueType(graphene.ObjectType):
     total_value = graphene.Float()
 
 
+class StockValueHistory(graphene.ObjectType):
+    ticker = graphene.String()
+    date = graphene.String()
+    open = graphene.String()
+    high = graphene.String()
+    close = graphene.String()
+
+
 class Query(graphene.ObjectType):
+    # Models
     stocks = DjangoListField(StockType)
     stock_by_id = graphene.Field(StockType, id=graphene.String())
-    stock_current_info = graphene.Field(StockInfoType, ticker=graphene.String())
 
     transactions = DjangoListField(TransactionType)
     transaction_by_id = graphene.Field(TransactionType, id=graphene.String())
 
+    # Adapters
+    stock_current_info = graphene.Field(StockInfoType, ticker=graphene.String())
+
+    # Charts
     stocks_units_current_value = graphene.List(StockUnitsCurrentValueType)
+    stock_value_history = graphene.List(
+        StockValueHistory,
+        ticker=graphene.String(),
+        period=graphene.String(),
+        interval=graphene.String(),
+    )
 
     def resolve_stock_by_id(root, info, id):
         return Stock.objects.get(pk=id)
@@ -63,3 +81,6 @@ class Query(graphene.ObjectType):
 
     def resolve_stocks_units_current_value(root, info):
         return list(data_factory.build_stock_units_current_value())
+
+    def resolve_stock_value_history(root, info, ticker, period, interval):
+        return list(data_factory.build_stock_line_factory(ticker, period, interval))

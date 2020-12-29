@@ -48,6 +48,6 @@ class StocksMarketService:
         )
 
     def get_history(
-        self, ticker_symbol: str, period: str = "1d"
+        self, ticker_symbol: str, period: str = "1d", interval: str = "1d"
     ) -> Iterable[StockHistory]:
-        return self.adapter.get_history(ticker_symbol, period)
+        return self.adapter.get_history(ticker_symbol, period, interval)
