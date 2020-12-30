@@ -15,7 +15,8 @@ class ModelQuery(graphene.ObjectType):
     stocks = DjangoListField(types.StockType)
     stock_by_id = graphene.Field(types.StockType, id=graphene.String())
 
-    transactions = DjangoFilterConnectionField(types.TransactionType)
+    transactions = DjangoListField(types.TransactionType)
+    transactions_filter = DjangoFilterConnectionField(types.TransactionType)
     transaction_by_id = graphene.Field(types.TransactionType, id=graphene.String())
 
     def resolve_stock_by_id(root, info, id):
