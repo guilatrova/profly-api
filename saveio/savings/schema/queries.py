@@ -10,18 +10,29 @@ market_service = StocksMarketService()
 data_factory = ChartDataFactory()
 
 
-class Query(graphene.ObjectType):
-    # Models
+class ModelQuery(graphene.ObjectType):
     stocks = DjangoListField(types.StockType)
     stock_by_id = graphene.Field(types.StockType, id=graphene.String())
 
     transactions = DjangoListField(types.TransactionType)
     transaction_by_id = graphene.Field(types.TransactionType, id=graphene.String())
 
-    # Adapters
+    def resolve_stock_by_id(root, info, id):
+        return Stock.objects.get(pk=id)
+
+    def resolve_transaction_by_id(root, info, id):
+        return Transaction.objects.get(pk=id)
+
+
+class MarketQuery(graphene.ObjectType):
     stock_current_info = graphene.Field(types.StockInfoType, ticker=graphene.String())
 
-    # Charts / Data
+    def resolve_stock_current_info(root, info, ticker):
+        info = market_service.get_stock_info(ticker)
+        return info
+
+
+class ChartDataQuery(graphene.ObjectType):
     stocks_units_current_value = graphene.List(types.StockUnitsCurrentValueType)
     stock_value_history = graphene.List(
         types.StockValueHistory,
@@ -40,16 +51,6 @@ class Query(graphene.ObjectType):
         ticker=graphene.String(),
     )
 
-    def resolve_stock_by_id(root, info, id):
-        return Stock.objects.get(pk=id)
-
-    def resolve_transaction_by_id(root, info, id):
-        return Transaction.objects.get(pk=id)
-
-    def resolve_stock_current_info(root, info, ticker):
-        info = market_service.get_stock_info(ticker)
-        return info
-
     def resolve_stocks_units_current_value(root, info):
         return list(data_factory.build_stock_units_current_value())
 
@@ -64,3 +65,7 @@ class Query(graphene.ObjectType):
 
     def resolve_owned_stock_summary(root, info, ticker):
         return data_factory.build_owned_stock_summary(ticker)
+
+
+class Query(ModelQuery, MarketQuery, ChartDataQuery, graphene.ObjectType):
+    pass
