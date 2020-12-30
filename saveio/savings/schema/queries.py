@@ -1,5 +1,6 @@
 import graphene
 from graphene_django import DjangoListField
+from graphene_django.filter import DjangoFilterConnectionField
 from markets.factories import ChartDataFactory
 from markets.services import StocksMarketService
 from savings.models import Stock, Transaction
@@ -14,7 +15,7 @@ class ModelQuery(graphene.ObjectType):
     stocks = DjangoListField(types.StockType)
     stock_by_id = graphene.Field(types.StockType, id=graphene.String())
 
-    transactions = DjangoListField(types.TransactionType)
+    transactions = DjangoFilterConnectionField(types.TransactionType)
     transaction_by_id = graphene.Field(types.TransactionType, id=graphene.String())
 
     def resolve_stock_by_id(root, info, id):

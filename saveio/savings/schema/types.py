@@ -3,6 +3,20 @@ from graphene_django import DjangoObjectType
 from savings.models import Stock, Transaction
 
 
+class ExtendedConnection(graphene.Connection):
+    class Meta:
+        abstract = True
+
+    total_count = graphene.Int()
+    edge_count = graphene.Int()
+
+    def resolve_total_count(root, info, **kwargs):
+        return root.length
+
+    def resolve_edge_count(root, info, **kwargs):
+        return len(root.edges)
+
+
 class StockType(DjangoObjectType):
     class Meta:
         model = Stock
@@ -11,6 +25,9 @@ class StockType(DjangoObjectType):
 class TransactionType(DjangoObjectType):
     class Meta:
         model = Transaction
+        filter_fields = ["stock__ticker", "performed_at"]
+        interfaces = (graphene.Node,)
+        connection_class = ExtendedConnection
 
     value = graphene.Float()
 

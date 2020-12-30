@@ -4,3 +4,4 @@ html5lib==1.1
 yfinance==0.1.55
 djangorestframework==3.12.2
 django-cors-headers==3.6.0
+django-filter==2.4.0
