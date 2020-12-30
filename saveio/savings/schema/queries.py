@@ -1,93 +1,42 @@
 import graphene
-from graphene_django import DjangoListField, DjangoObjectType
+from graphene_django import DjangoListField
 from markets.factories import ChartDataFactory
 from markets.services import StocksMarketService
 from savings.models import Stock, Transaction
+
+from . import types
 
 market_service = StocksMarketService()
 data_factory = ChartDataFactory()
 
 
-class StockType(DjangoObjectType):
-    class Meta:
-        model = Stock
-
-
-class TransactionType(DjangoObjectType):
-    class Meta:
-        model = Transaction
-
-    value = graphene.Float()
-
-    def resolve_value(self, info):
-        return self.value
-
-
-class StockInfoType(graphene.ObjectType):
-    """Gathers stock with price at the moment"""
-
-    name = graphene.String()
-    ticker = graphene.String()
-    currency = graphene.String()
-    current_price = graphene.Float()
-    logo_url = graphene.String()
-    timestamp = graphene.DateTime()
-
-
-class StockUnitsCurrentValueType(graphene.ObjectType):
-    ticker = graphene.String()
-    total_units = graphene.Float()
-    close_price = graphene.Float()
-    total_value = graphene.Float()
-
-
-class StockValueHistory(graphene.ObjectType):
-    ticker = graphene.String()
-    date = graphene.Date()
-    open = graphene.Float()
-    high = graphene.Float()
-    close = graphene.Float()
-
-
-class StockTransactionsValueHistory(graphene.ObjectType):
-    history = graphene.List(StockValueHistory)
-    transactions = graphene.List(TransactionType)
-
-
-class OwnedStockSummary(graphene.ObjectType):
-    ticker = graphene.String()
-    units = graphene.Float()
-    average_buy_price = graphene.Float()
-    average_sell_price = graphene.Float()
-
-
 class Query(graphene.ObjectType):
     # Models
-    stocks = DjangoListField(StockType)
-    stock_by_id = graphene.Field(StockType, id=graphene.String())
+    stocks = DjangoListField(types.StockType)
+    stock_by_id = graphene.Field(types.StockType, id=graphene.String())
 
-    transactions = DjangoListField(TransactionType)
-    transaction_by_id = graphene.Field(TransactionType, id=graphene.String())
+    transactions = DjangoListField(types.TransactionType)
+    transaction_by_id = graphene.Field(types.TransactionType, id=graphene.String())
 
     # Adapters
-    stock_current_info = graphene.Field(StockInfoType, ticker=graphene.String())
+    stock_current_info = graphene.Field(types.StockInfoType, ticker=graphene.String())
 
     # Charts / Data
-    stocks_units_current_value = graphene.List(StockUnitsCurrentValueType)
+    stocks_units_current_value = graphene.List(types.StockUnitsCurrentValueType)
     stock_value_history = graphene.List(
-        StockValueHistory,
+        types.StockValueHistory,
         ticker=graphene.String(),
         period=graphene.String(),
         interval=graphene.String(),
     )
     stock_transactions_value_history = graphene.Field(
-        StockTransactionsValueHistory,
+        types.StockTransactionsValueHistory,
         ticker=graphene.String(),
         period=graphene.String(),
         interval=graphene.String(),
     )
     owned_stock_summary = graphene.Field(
-        OwnedStockSummary,
+        types.OwnedStockSummary,
         ticker=graphene.String(),
     )
 
@@ -111,7 +60,7 @@ class Query(graphene.ObjectType):
         history = list(data_factory.build_stock_line_factory(ticker, period, interval))
         transactions = Transaction.objects.filter(stock__ticker=ticker)
 
-        return StockTransactionsValueHistory(history, transactions)
+        return types.StockTransactionsValueHistory(history, transactions)
 
     def resolve_owned_stock_summary(root, info, ticker):
         return data_factory.build_owned_stock_summary(ticker)
