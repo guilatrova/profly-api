@@ -48,7 +48,7 @@ class StockUnitsByTicker:
     total_value: float = field(init=False)
 
     def __post_init__(self):
-        self.close_price = round(self.close_price, ROUND_DIGITS)
+        self.close_price = round(self.close_price or 0, ROUND_DIGITS)
         self.total_value = self.close_price * self.total_units
 
 
