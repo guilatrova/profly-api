@@ -50,3 +50,15 @@ class StockUnitsByTicker:
     def __post_init__(self):
         self.close_price = round(self.close_price, ROUND_DIGITS)
         self.total_value = self.close_price * self.total_units
+
+
+@dataclass
+class OwnedStockSummary:
+    """Represents how much you own and
+    average price you paid/sold
+    """
+
+    ticker: str
+    units: float
+    average_buy_price: float
+    average_sell_price: float

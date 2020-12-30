@@ -1,6 +1,6 @@
 from typing import Iterable
 
-from markets.dtos import StockHistory, StockUnitsByTicker
+from markets.dtos import OwnedStockSummary, StockHistory, StockUnitsByTicker
 from savings.models import Transaction
 
 from .services import StocksMarketService
@@ -35,3 +35,14 @@ class ChartDataFactory:
         “3mo”
         """
         return self.market_service.get_history(ticker_symbol, period, interval)
+
+    def build_owned_stock_summary(self, ticker_symbol: str) -> OwnedStockSummary:
+        avg_data = Transaction.objects.aggregate_avg_units_price_by_ticker().get(
+            ticker=ticker_symbol
+        )
+        return OwnedStockSummary(
+            ticker=ticker_symbol,
+            units=avg_data["total_units"],
+            average_buy_price=avg_data["avg_buy_price"],
+            average_sell_price=avg_data["avg_sell_price"],
+        )
