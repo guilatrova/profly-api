@@ -14,8 +14,6 @@ class TransactionType(DjangoObjectType):
     class Meta:
         model = Transaction
         filter_fields = {
-            "id": ["exact"],
-            "stock_id": ["exact"],
             "stock__ticker": ["exact"],
             "performed_at": ["exact", "lte", "gte"],
         }
