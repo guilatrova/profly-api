@@ -9,6 +9,8 @@ class StockType(DjangoObjectType):
     class Meta:
         model = Stock
 
+    id = graphene.ID(source="pk", required=True)
+
 
 class TransactionType(DjangoObjectType):
     class Meta:
@@ -20,6 +22,7 @@ class TransactionType(DjangoObjectType):
         interfaces = (graphene.Node,)
         connection_class = CustomConnection
 
+    id = graphene.ID(source="pk", required=True)
     value = graphene.Float()
 
     def resolve_value(self, info):
