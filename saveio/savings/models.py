@@ -37,3 +37,6 @@ class Transaction(models.Model):
     def value(self):
         modifier = 1 if self.units > 0 else -1
         return float(self.strike_price) * self.units * modifier
+
+    class Meta:
+        ordering = ["-performed_at"]
