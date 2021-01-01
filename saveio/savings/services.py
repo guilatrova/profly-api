@@ -1,19 +1,11 @@
 import csv
-from datetime import date
 
 from .models import Transaction
 
 
 class TransactionsCSVDataFactory:
-    def __init__(self, http_response):
-        suffix = str(date.today())
-        self.http_response = http_response
-        self.http_response[
-            "Content-Disposition"
-        ] = f'attachment; filename="transactions{suffix}.csv"'
-
-    def write_data(self):
-        writer = csv.writer(self.http_response)
+    def write_data(self, http_response):
+        writer = csv.writer(http_response)
         writer.writerow(
             ["Date Time", "Stock", "Strike Price", "Action", "Units", "Value"]
         )
