@@ -17,8 +17,10 @@ from django.contrib import admin
 from django.urls import path
 
 from graphene_django.views import GraphQLView
+from savings.views import transactions_as_csv_view
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("graphql/", GraphQLView.as_view(graphiql=True)),
+    path("csv/", transactions_as_csv_view),
 ]
