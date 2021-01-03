@@ -130,3 +130,17 @@ USE_TZ = True
 STATIC_URL = "/static/"
 
 GRAPHENE = {"SCHEMA": "saveio.schema.schema"}
+
+# Authentication
+
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": ["authentication.CognitoAuthentication"],
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.IsAuthenticated",
+    ],
+}
+
+COGNITO_JWKS_URL = (
+    "https://cognito-idp.us-east-1.amazonaws.com/"
+    "us-east-1_E623hvSU9/.well-known/jwks.json"
+)
