@@ -25,6 +25,13 @@ class TransactionType(DjangoObjectType):
     id = graphene.ID(source="pk", required=True)
     value = graphene.Float()
 
+    @classmethod
+    def get_queryset(cls, queryset, info):
+        if info.context.user.is_anonymous:
+            return queryset.none()
+
+        return queryset.filter(user=info.context.user)
+
     def resolve_value(self, info):
         return self.value
 
