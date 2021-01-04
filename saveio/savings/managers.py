@@ -3,17 +3,19 @@ from django.db.models import Avg, F, Manager, Q, Sum
 
 
 class TransactionManager(Manager):
-    def aggregate_units_by_ticker(self):
+    def aggregate_units_by_ticker(self, user):
         return (
-            self.values(ticker=F("stock__ticker"))
+            self.filter(user=user)
+            .values(ticker=F("stock__ticker"))
             .order_by("stock_id")
             .annotate(total_units=Sum("units"))
             .filter(total_units__gt=0)
         )
 
-    def aggregate_avg_units_price_by_ticker(self):
+    def aggregate_avg_units_price_by_ticker(self, user):
         return (
-            self.values(ticker=F("stock__ticker"))
+            self.filter(user=user)
+            .values(ticker=F("stock__ticker"))
             .annotate(total_units=Sum("units"))
             .annotate(avg_buy_price=Avg("strike_price", filter=Q(units__gt=0)))
             .annotate(avg_sell_price=Avg("strike_price", filter=Q(units__lte=0)))

@@ -59,7 +59,7 @@ class ChartDataQuery(graphene.ObjectType):
     )
 
     def resolve_stocks_units_current_value(root, info):
-        return list(data_factory.build_stock_units_current_value())
+        return list(data_factory.build_stock_units_current_value(info.context.user))
 
     def resolve_stock_value_history(root, info, ticker, period, interval):
         return list(data_factory.build_stock_line_factory(ticker, period, interval))
@@ -71,7 +71,7 @@ class ChartDataQuery(graphene.ObjectType):
         return types.StockTransactionsValueHistory(history, transactions)
 
     def resolve_owned_stock_summary(root, info, ticker):
-        return data_factory.build_owned_stock_summary(ticker)
+        return data_factory.build_owned_stock_summary(info.context.user, ticker)
 
 
 class Query(ModelQuery, MarketQuery, ChartDataQuery, graphene.ObjectType):
