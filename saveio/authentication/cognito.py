@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from rest_framework.authentication import BaseAuthentication
 
 import requests
+from cachetools.func import ttl_cache
 from jose import exceptions as jose_exceptions
 from jose import jwt
 
@@ -14,9 +15,6 @@ logger = logging.getLogger(__name__)
 
 
 class CognitoAuthentication(BaseAuthentication):
-    def __init__(self):
-        self.JWKS_URL = settings.COGNITO_JWKS_URL
-
     @staticmethod
     def _get_exponant_and_modulus(jwk_sets, kid, algorithm):
         for jwk in jwk_sets["keys"]:
@@ -36,9 +34,10 @@ class CognitoAuthentication(BaseAuthentication):
         if prefix.upper() != "BEARER":
             raise exceptions.AuthenticationInvalidHeaderFormatException()
 
-    def _get_jwks(self, jwks_url=None):
+    @staticmethod
+    def _get_jwks(jwks_url=None):
         if not jwks_url:
-            jwks_url = self.JWKS_URL
+            jwks_url = settings.COGNITO_JWKS_URL
 
         logger.debug(f"Fetching public keys from {jwks_url}")
         response = requests.get(jwks_url)
@@ -50,7 +49,8 @@ class CognitoAuthentication(BaseAuthentication):
 
         return jwks
 
-    def _verify_token(self, jwks, token):
+    @classmethod
+    def _verify_token(cls, jwks, token):
         header = jwt.get_unverified_header(token)
         unverified_body = jwt.get_unverified_claims(token)
 
@@ -59,7 +59,7 @@ class CognitoAuthentication(BaseAuthentication):
         kid = header["kid"]
         algorithm = header["alg"]
 
-        key = self._get_exponant_and_modulus(jwks, kid, algorithm)
+        key = cls._get_exponant_and_modulus(jwks, kid, algorithm)
 
         jwt.decode(
             token, key, issuer=iss, audience=aud, options={"verify_at_hash": False}
@@ -67,12 +67,13 @@ class CognitoAuthentication(BaseAuthentication):
 
         return unverified_body
 
-    def _validate_token(self, header):
+    @classmethod
+    def _validate_token(cls, header):
         _, token = header.split()
-        jwks = self._get_jwks()
+        jwks = cls._get_jwks()
 
         try:
-            body = self._verify_token(jwks, token)
+            body = cls._verify_token(jwks, token)
         except jose_exceptions.ExpiredSignatureError as e:
             raise exceptions.AuthenticationJWTExpiredException() from e
         except jose_exceptions.JWTClaimsError as e:
@@ -87,7 +88,8 @@ class CognitoAuthentication(BaseAuthentication):
 
         return token, body
 
-    def _handle_user(self, jwt_body):
+    @staticmethod
+    def _handle_user(jwt_body):
         """
         Payload example: {
             'sub': 'c6042a21-0227-45aa-aee1-e0f0630a43da',
@@ -116,10 +118,12 @@ class CognitoAuthentication(BaseAuthentication):
 
         return user
 
-    def process_auth_header(self, auth_header):
+    @classmethod
+    @ttl_cache(maxsize=128, ttl=600)
+    def process_auth_header(cls, auth_header):
         try:
-            self._validate_header_format(auth_header)
-            token, body = self._validate_token(auth_header)
+            cls._validate_header_format(auth_header)
+            token, body = cls._validate_token(auth_header)
         except exceptions.AuthenticationException:
             logger.debug(f"AuthenticationException with headers: {auth_header}")
             raise
@@ -127,7 +131,7 @@ class CognitoAuthentication(BaseAuthentication):
             logger.exception("Authorization header raised exception")
             raise
         else:
-            user = self._handle_user(body)
+            user = cls._handle_user(body)
 
         return (user, token)
 
