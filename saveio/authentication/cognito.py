@@ -116,20 +116,12 @@ class CognitoAuthentication(BaseAuthentication):
 
         return user
 
-    def authenticate(self, request):
-        """
-        https://www.django-rest-framework.org/api-guide/authentication/#custom-authentication
-        """
-        print("OK, I'M AUTHENTICATING...")
-        auth_header = request.headers.get("Authorization")
-        if not auth_header:
-            raise exceptions.AuthenticationHeaderNotProvidedException()
-
+    def process_auth_header(self, auth_header):
         try:
             self._validate_header_format(auth_header)
             token, body = self._validate_token(auth_header)
         except exceptions.AuthenticationException:
-            logger.debug(f"AuthenticationException with headers: {request.headers}")
+            logger.debug(f"AuthenticationException with headers: {auth_header}")
             raise
         except Exception:
             logger.exception("Authorization header raised exception")
@@ -138,3 +130,14 @@ class CognitoAuthentication(BaseAuthentication):
             user = self._handle_user(body)
 
         return (user, token)
+
+    def authenticate(self, request):
+        """
+        https://www.django-rest-framework.org/api-guide/authentication/#custom-authentication
+        """
+        auth_header = request.headers.get("Authorization")
+
+        if not auth_header:
+            raise exceptions.AuthenticationHeaderNotProvidedException()
+
+        return self.process_auth_header(auth_header)

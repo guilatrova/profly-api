@@ -129,7 +129,10 @@ USE_TZ = True
 
 STATIC_URL = "/static/"
 
-GRAPHENE = {"SCHEMA": "saveio.schema.schema"}
+GRAPHENE = {
+    "SCHEMA": "saveio.schema.schema",
+    "MIDDLEWARE": ["authentication.middlewares.BearerTokenAuthMiddleware"],
+}
 
 # Authentication
 
