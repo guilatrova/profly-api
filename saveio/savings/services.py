@@ -4,13 +4,13 @@ from .models import Transaction
 
 
 class TransactionsCSVDataFactory:
-    def write_data(self, http_response):
+    def write_data(self, user, http_response):
         writer = csv.writer(http_response)
         writer.writerow(
             ["Date Time", "Stock", "Strike Price", "Action", "Units", "Value"]
         )
 
-        for t in Transaction.objects.all().prefetch_related("stock"):
+        for t in Transaction.objects.filter(user=user).prefetch_related("stock"):
             writer.writerow(
                 [
                     str(t.performed_at),

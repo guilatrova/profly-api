@@ -27,6 +27,7 @@ class TransactionType(DjangoObjectType):
 
     @classmethod
     def get_queryset(cls, queryset, info):
+        print(f"USER: {info.context.user}")
         if info.context.user.is_anonymous:
             return queryset.none()
 

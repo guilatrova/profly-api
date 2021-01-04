@@ -10,8 +10,10 @@ class ChartDataFactory:
     def __init__(self, service=None):
         self.market_service = service or StocksMarketService()
 
-    def build_stock_units_current_value(self) -> Iterable[StockUnitsByTicker]:
-        aggregated_data = Transaction.objects.aggregate_units_by_ticker()
+    def build_stock_units_current_value(self, user) -> Iterable[StockUnitsByTicker]:
+        aggregated_data = Transaction.objects.filter(
+            user=user
+        ).aggregate_units_by_ticker()
 
         for units_by_ticker in aggregated_data:
             ticker = units_by_ticker["ticker"]
@@ -36,9 +38,11 @@ class ChartDataFactory:
         """
         return self.market_service.get_history(ticker_symbol, period, interval)
 
-    def build_owned_stock_summary(self, ticker_symbol: str) -> OwnedStockSummary:
-        avg_data = Transaction.objects.aggregate_avg_units_price_by_ticker().get(
-            ticker=ticker_symbol
+    def build_owned_stock_summary(self, user, ticker_symbol: str) -> OwnedStockSummary:
+        avg_data = (
+            Transaction.objects.filter(user=user)
+            .aggregate_avg_units_price_by_ticker()
+            .get(ticker=ticker_symbol)
         )
         return OwnedStockSummary(
             ticker=ticker_symbol,

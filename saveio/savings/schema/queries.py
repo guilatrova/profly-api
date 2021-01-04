@@ -23,7 +23,12 @@ class ModelQuery(graphene.ObjectType):
         return Stock.objects.get(pk=id)
 
     def resolve_transaction_by_id(root, info, id):
-        return Transaction.objects.get(pk=id)
+        transaction = Transaction.objects.get(pk=id)
+
+        if transaction.user == info.context.user:
+            return transaction
+
+        return None
 
 
 class MarketQuery(graphene.ObjectType):

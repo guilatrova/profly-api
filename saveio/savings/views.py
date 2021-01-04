@@ -15,11 +15,10 @@ def get_csv_name():
 
 @api_view(["GET"])
 def transactions_as_csv_view(request):
-    print(f"USER: {request.user}")
     csv_name = get_csv_name()
     response = HttpResponse(content_type="text/csv")
     response["Content-Disposition"] = f'attachment; filename="{csv_name}"'
 
-    data_factory.write_data(response)
+    data_factory.write_data(request.user, response)
 
     return response
