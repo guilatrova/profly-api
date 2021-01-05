@@ -1,4 +1,4 @@
-from .settings import *
+from .elb import *
 
 # DEBUG = False
 
