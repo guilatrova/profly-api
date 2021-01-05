@@ -17,6 +17,7 @@ class TransactionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Transaction
         exclude = ["stock"]
+        read_only_fields = ["user"]
 
     ticker = serializers.CharField(write_only=True)
 
@@ -29,6 +30,9 @@ class TransactionSerializer(serializers.ModelSerializer):
         return stock
 
     def create(self, validated_data: dict):
+        user = self.context["request"].user
         stock = validated_data.pop("ticker")
+
         validated_data["stock_id"] = stock.id
+        validated_data["user"] = user
         return super().create(validated_data)
