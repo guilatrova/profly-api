@@ -1,4 +1,5 @@
 import json
+import os
 
 from django.http import HttpResponse
 from rest_framework import status
@@ -8,6 +9,11 @@ from rest_framework.permissions import IsAuthenticated
 from authentication import CognitoAuthentication
 from authentication.exceptions import AuthenticationException
 from graphene_django.views import GraphQLView
+
+
+def index(request):
+    version = os.getenv("COMMIT_HASH")
+    return HttpResponse(f"profly-api@{version}")
 
 
 class PrivateGraphQLView(GraphQLView):
