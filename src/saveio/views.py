@@ -6,9 +6,10 @@ from rest_framework import status
 from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.permissions import IsAuthenticated
 
+from graphene_django.views import GraphQLView
+
 from authentication import CognitoAuthentication
 from authentication.exceptions import AuthenticationException
-from graphene_django.views import GraphQLView
 
 
 def index(request):

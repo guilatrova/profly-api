@@ -1,6 +1,7 @@
 import graphene
 from graphene_django import DjangoListField
 from graphene_django.filter import DjangoFilterConnectionField
+
 from markets.factories import ChartDataFactory
 from markets.services import StocksMarketService
 from savings.models import Stock, Transaction

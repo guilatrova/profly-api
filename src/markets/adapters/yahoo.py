@@ -2,6 +2,7 @@ import logging
 from typing import Iterable, Optional
 
 import yfinance
+
 from markets.dtos import StockHistory, StockInfo
 
 logger = logging.getLogger(__name__)
