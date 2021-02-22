@@ -34,6 +34,9 @@ class Transaction(models.Model):
     performed_at = models.DateTimeField(default=timezone.now)
     created_at = models.DateTimeField(auto_now_add=True)
 
+    emotion = models.CharField(null=True, max_length=10)
+    notes = models.CharField(null=True, max_length=255)
+
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.PROTECT,
