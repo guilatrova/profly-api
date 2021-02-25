@@ -15,6 +15,7 @@ DEBUG = os.getenv("DEBUG", "False") == "True"
 ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", "127.0.0.1,localhost,*").split(",")
 CORS_ORIGIN_ALLOW_ALL = False
 CORS_ORIGIN_WHITELIST = (
-    "profly-i7f6f.ondigitalocean.app",
+    "https://profly-i7f6f.ondigitalocean.app",
     "https://www.profly.app",
+    "https://web.profly.app",
 )
