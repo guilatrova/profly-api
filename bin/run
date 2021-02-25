@@ -1,5 +1,5 @@
 #!/bin/bash
 
-readonly MANAGE_PATH="saveio/manage.py"
+readonly MANAGE_PATH="profly/manage.py"
 
 python "$MANAGE_PATH" runserver
