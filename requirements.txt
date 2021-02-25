@@ -9,4 +9,5 @@ graphene==2.1.8
 graphene-django==2.14.0
 python-jose==3.2.0 # authentication package
 cachetools==4.2.0
-psycopg2-binary==2.8.6
+gunicorn==20.0.4
+# psycopg2-binary==2.8.6 If Postgres
