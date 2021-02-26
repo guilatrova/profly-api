@@ -35,14 +35,11 @@ class TransactionSerializer(serializers.ModelSerializer):
         return stock
 
     def create(self, validated_data: dict):
-        logger.info(f"Creating transaction with initial data {validated_data}")
         user = self.context["request"].user
         stock = validated_data.pop("ticker")
 
         validated_data["stock_id"] = stock.id
         validated_data["user"] = user
 
-        logger.info(f"Augmenting data: {validated_data}")
-        instance = super().create(validated_data)
-        logger.info(f"Instance: {instance}")
-        return instance
+        logger.info(f"Creating transaction with data: {validated_data}")
+        return super().create(validated_data)
