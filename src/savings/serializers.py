@@ -25,10 +25,9 @@ class TransactionSerializer(serializers.ModelSerializer):
     ticker = serializers.CharField(write_only=True)
 
     def validate_ticker(self, raw_ticker):
-        print("* Validating ticker")
-        print(f"Validating ticker {raw_ticker}")
+        logger.info(f"Validating ticker {raw_ticker}")
         stock = market_service.get_stock(raw_ticker)
-        print(f"Got stock data: {stock}")
+        logger.info(f"Got stock data: {stock.__dict__}")
 
         if not stock:
             raise serializers.ValidationError(f"{raw_ticker} not found")
@@ -36,14 +35,14 @@ class TransactionSerializer(serializers.ModelSerializer):
         return stock
 
     def create(self, validated_data: dict):
-        print(f"Creating transaction with initial data {validated_data}")
+        logger.info(f"Creating transaction with initial data {validated_data}")
         user = self.context["request"].user
         stock = validated_data.pop("ticker")
 
         validated_data["stock_id"] = stock.id
         validated_data["user"] = user
 
-        print(f"Augmenting data: {validated_data}")
+        logger.info(f"Augmenting data: {validated_data}")
         instance = super().create(validated_data)
-        print(f"Instance: {instance}")
+        logger.info(f"Instance: {instance}")
         return instance
