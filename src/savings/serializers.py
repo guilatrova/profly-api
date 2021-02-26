@@ -26,9 +26,9 @@ class TransactionSerializer(serializers.ModelSerializer):
 
     def validate_ticker(self, raw_ticker):
         print("* Validating ticker")
-        logger.info(f"Validating ticker {raw_ticker}")
+        print(f"Validating ticker {raw_ticker}")
         stock = market_service.get_stock(raw_ticker)
-        logger.info(f"Got stock data: {stock}")
+        print(f"Got stock data: {stock}")
 
         if not stock:
             raise serializers.ValidationError(f"{raw_ticker} not found")
@@ -36,11 +36,14 @@ class TransactionSerializer(serializers.ModelSerializer):
         return stock
 
     def create(self, validated_data: dict):
-        logger.info(f"Creating transaction with initial data {validated_data}")
+        print(f"Creating transaction with initial data {validated_data}")
         user = self.context["request"].user
         stock = validated_data.pop("ticker")
 
         validated_data["stock_id"] = stock.id
         validated_data["user"] = user
-        logger.info(f"Augmenting data: {validated_data}")
-        return super().create(validated_data)
+
+        print(f"Augmenting data: {validated_data}")
+        instance = super().create(validated_data)
+        print(f"Instance: {instance}")
+        return instance
