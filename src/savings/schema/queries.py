@@ -82,8 +82,9 @@ class ChartDataQuery(graphene.ObjectType):
     def resolve_stock_transactions_value_history(root, info, ticker, period, interval):
         history = list(data_factory.build_stock_line_factory(ticker, period, interval))
         transactions = Transaction.objects.filter(stock__ticker=ticker)
+        currency = Stock.objects.get(ticker=ticker).currency
 
-        return types.StockTransactionsValueHistory(history, transactions)
+        return types.StockTransactionsValueHistory(history, transactions, currency)
 
     def resolve_owned_stock_summary(root, info, ticker):
         return data_factory.build_owned_stock_summary(info.context.user, ticker)

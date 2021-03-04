@@ -75,6 +75,7 @@ class StockValueHistory(graphene.ObjectType):
 class StockTransactionsValueHistory(graphene.ObjectType):
     history = graphene.List(StockValueHistory)
     transactions = graphene.List(TransactionType)
+    currency = graphene.String()
 
 
 class OwnedStockSummary(graphene.ObjectType):
