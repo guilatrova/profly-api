@@ -37,6 +37,14 @@ class TransactionType(DjangoObjectType):
         return self.value
 
 
+class CurrencyRate(graphene.ObjectType):
+    """Gathers rate between 2 currencies at the moment"""
+
+    from_currency = graphene.String()
+    to_currency = graphene.String()
+    rate = graphene.Float()
+
+
 class StockInfoType(graphene.ObjectType):
     """Gathers stock with price at the moment"""
 
