@@ -45,11 +45,14 @@ class StockUnitsByTicker:
     ticker: str
     total_units: float
     close_price: float
+    currency: str = field(init=False)
     total_value: float = field(init=False)
 
     def __post_init__(self):
         self.close_price = round(self.close_price or 0, ROUND_DIGITS)
         self.total_value = self.close_price * self.total_units
+        # TODO: Extract it from somewhere else
+        self.currency = "BRL" if self.ticker.endswith(".SA") else "USD"
 
 
 @dataclass

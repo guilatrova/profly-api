@@ -58,6 +58,7 @@ class StockInfoType(graphene.ObjectType):
 
 class StockUnitsCurrentValueType(graphene.ObjectType):
     ticker = graphene.String()
+    currency = graphene.String()
     total_units = graphene.Float()
     close_price = graphene.Float()
     total_value = graphene.Float()
