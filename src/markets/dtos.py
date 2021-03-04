@@ -65,3 +65,8 @@ class OwnedStockSummary:
     units: float
     average_buy_price: float
     average_sell_price: float
+    currency: str = field(init=False)
+
+    def __post_init__(self):
+        # TODO: Extract it from somewhere else
+        self.currency = "BRL" if self.ticker.endswith(".SA") else "USD"

@@ -79,6 +79,7 @@ class StockTransactionsValueHistory(graphene.ObjectType):
 
 class OwnedStockSummary(graphene.ObjectType):
     ticker = graphene.String()
+    currency = graphene.String()
     units = graphene.Float()
     average_buy_price = graphene.Float()
     average_sell_price = graphene.Float()
