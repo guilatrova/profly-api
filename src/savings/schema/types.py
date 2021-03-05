@@ -37,6 +37,14 @@ class TransactionType(DjangoObjectType):
         return self.value
 
 
+class CurrencyRate(graphene.ObjectType):
+    """Gathers rate between 2 currencies at the moment"""
+
+    from_currency = graphene.String()
+    to_currency = graphene.String()
+    rate = graphene.Float()
+
+
 class StockInfoType(graphene.ObjectType):
     """Gathers stock with price at the moment"""
 
@@ -50,6 +58,7 @@ class StockInfoType(graphene.ObjectType):
 
 class StockUnitsCurrentValueType(graphene.ObjectType):
     ticker = graphene.String()
+    currency = graphene.String()
     total_units = graphene.Float()
     close_price = graphene.Float()
     total_value = graphene.Float()
@@ -66,10 +75,12 @@ class StockValueHistory(graphene.ObjectType):
 class StockTransactionsValueHistory(graphene.ObjectType):
     history = graphene.List(StockValueHistory)
     transactions = graphene.List(TransactionType)
+    currency = graphene.String()
 
 
 class OwnedStockSummary(graphene.ObjectType):
     ticker = graphene.String()
+    currency = graphene.String()
     units = graphene.Float()
     average_buy_price = graphene.Float()
     average_sell_price = graphene.Float()
