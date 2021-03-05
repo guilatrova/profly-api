@@ -1,4 +1,5 @@
 import logging
+import re
 
 import requests
 from bs4 import BeautifulSoup
@@ -6,7 +7,6 @@ from bs4 import BeautifulSoup
 logger = logging.getLogger(__name__)
 
 DIV_WRAPPER_ID = "quote-header-info"
-RATE_SPAN_ATTRS = {"data-reactid": 32}
 
 
 class YahooRateScrapper:
@@ -17,6 +17,6 @@ class YahooRateScrapper:
 
         soup = BeautifulSoup(response.text, "lxml")
         wrapper = soup.find(id=DIV_WRAPPER_ID)
-        rate = wrapper.find("span", attrs=RATE_SPAN_ATTRS).text
+        rate = wrapper.find("span", text=re.compile(r"\d+")).text
 
         return float(rate)
