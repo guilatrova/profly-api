@@ -1,4 +1,5 @@
 from typing import Iterable, Optional
+import logging
 
 from savings.models import Stock
 
@@ -6,12 +7,15 @@ from .adapters import YahooAdapter
 from .dtos import StockHistory, StockInfo
 
 
+logger = logging.getLogger(__name__)
+
 class StocksMarketService:
     def __init__(self, adapter=None):
         self.adapter = adapter or YahooAdapter()
 
     def _handle_new_stock(self, info: Optional[StockInfo]):
         if info:
+            logger.info(f"Adding new stock from info: {info}")
             return Stock.objects.create(
                 ticker=info.ticker,
                 name=info.name,

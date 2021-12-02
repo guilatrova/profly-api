@@ -82,17 +82,11 @@ WSGI_APPLICATION = "profly.wsgi.application"
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
-    "formatters": {
-        "default": {
-            "format": "[%(levelname)s]:%(name)s:%(asctime)s:%(process)d:%(lineno)d: %(message)s",
-            "datefmt": "%Y-%m-%d %H:%M:%S",
-        },
-    },
+    "formatters": {"rich": {"datefmt": "[%X]"}},
     "handlers": {
         "console": {
-            "class": "logging.StreamHandler",
-            "stream": "ext://sys.stdout",
-            "formatter": "default",
+            "class": "rich.logging.RichHandler",
+            "formatter": "rich",
         },
     },
     "root": {"level": "DEBUG", "handlers": ["console"]},
