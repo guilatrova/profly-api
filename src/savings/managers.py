@@ -6,7 +6,11 @@ class TransactionManager(Manager):
     def aggregate_units_by_ticker(self, user):
         return (
             self.filter(user=user)
-            .values(ticker=F("stock__ticker"))
+            .values(
+                ticker=F("stock__ticker"),
+                name=F("stock__name"),
+                logo_url=F("stock__logo_url"),
+            )
             .order_by("stock_id")
             .annotate(total_units=Sum("units"))
             .filter(total_units__gt=0)

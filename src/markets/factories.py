@@ -14,11 +14,13 @@ class ChartDataFactory:
         aggregated_data = Transaction.objects.aggregate_units_by_ticker(user)
 
         for units_by_ticker in aggregated_data:
+            name = units_by_ticker["name"]
+            logo_url = units_by_ticker["logo_url"]
             ticker = units_by_ticker["ticker"]
             history = next(self.market_service.get_history(ticker))
 
             yield StockUnitsByTicker(
-                ticker, units_by_ticker["total_units"], history.close
+                ticker, name, logo_url, units_by_ticker["total_units"], history.close
             )
 
     def build_stock_line_factory(

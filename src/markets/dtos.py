@@ -43,6 +43,8 @@ class StockHistory:
 @dataclass
 class StockUnitsByTicker:
     ticker: str
+    name: str
+    logo_url: str
     total_units: float
     close_price: float
     currency: str = field(init=False)
