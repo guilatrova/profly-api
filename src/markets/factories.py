@@ -10,6 +10,10 @@ class ChartDataFactory:
     def __init__(self, service=None):
         self.market_service = service or StocksMarketService()
 
+    def _get_ticker_close_price(self, ticker: str):
+        history = next(self.market_service.get_history(ticker))
+        return history.close
+
     def build_stock_units_current_value(self, user) -> Iterable[StockUnitsByTicker]:
         aggregated_data = Transaction.objects.aggregate_units_by_ticker(user)
 
@@ -17,10 +21,10 @@ class ChartDataFactory:
             name = units_by_ticker["name"]
             logo_url = units_by_ticker["logo_url"]
             ticker = units_by_ticker["ticker"]
-            history = next(self.market_service.get_history(ticker))
+            close_price = self._get_ticker_close_price(ticker)
 
             yield StockUnitsByTicker(
-                ticker, name, logo_url, units_by_ticker["total_units"], history.close
+                ticker, name, logo_url, units_by_ticker["total_units"], close_price
             )
 
     def build_stock_line_factory(
@@ -42,9 +46,14 @@ class ChartDataFactory:
         avg_data = Transaction.objects.aggregate_avg_units_price_by_ticker(user).get(
             ticker=ticker_symbol
         )
+        total_units = avg_data["total_units"]
+        close_price = self._get_ticker_close_price(ticker_symbol)
+        current_value = close_price * total_units
+
         return OwnedStockSummary(
             ticker=ticker_symbol,
-            units=avg_data["total_units"],
+            units=total_units,
             average_buy_price=avg_data["avg_buy_price"],
             average_sell_price=avg_data["avg_sell_price"],
+            current_value=current_value,
         )

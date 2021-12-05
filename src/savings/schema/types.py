@@ -86,3 +86,4 @@ class OwnedStockSummary(graphene.ObjectType):
     units = graphene.Float()
     average_buy_price = graphene.Float()
     average_sell_price = graphene.Float()
+    current_value = graphene.Float()

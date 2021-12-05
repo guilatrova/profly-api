@@ -67,6 +67,7 @@ class OwnedStockSummary:
     units: float
     average_buy_price: float
     average_sell_price: float
+    current_value: float
     currency: str = field(init=False)
 
     def __post_init__(self):
