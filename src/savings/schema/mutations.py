@@ -1,7 +1,7 @@
 import graphene
 from graphene_django.rest_framework.mutation import SerializerMutation
 
-from savings.models import Transaction
+from savings.models import StockTransaction
 from savings.serializers import StockSerializer, TransactionSerializer
 
 
@@ -25,7 +25,7 @@ class DeleteTransactionMutation(graphene.Mutation):
 
     @classmethod
     def mutate(cls, root, info, **kwargs):
-        Transaction.objects.filter(pk=kwargs["id"]).delete()
+        StockTransaction.objects.filter(pk=kwargs["id"]).delete()
         return cls(ok=True)
 
 

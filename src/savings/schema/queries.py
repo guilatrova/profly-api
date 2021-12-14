@@ -5,7 +5,7 @@ from graphene_django.filter import DjangoFilterConnectionField
 from currencies.services import CurrencyRateService
 from markets.factories import ChartDataFactory
 from markets.services import StocksMarketService
-from savings.models import Stock, Transaction
+from savings.models import Stock, StockTransaction
 
 from . import types
 
@@ -26,7 +26,7 @@ class ModelQuery(graphene.ObjectType):
         return Stock.objects.get(pk=id)
 
     def resolve_transaction_by_id(root, info, id):
-        transaction = Transaction.objects.get(pk=id)
+        transaction = StockTransaction.objects.get(pk=id)
 
         if transaction.user == info.context.user:
             return transaction
@@ -81,7 +81,7 @@ class ChartDataQuery(graphene.ObjectType):
 
     def resolve_stock_transactions_value_history(root, info, ticker, period, interval):
         history = list(data_factory.build_stock_line_factory(ticker, period, interval))
-        transactions = Transaction.objects.filter(stock__ticker=ticker)
+        transactions = StockTransaction.objects.filter(stock__ticker=ticker)
         currency = Stock.objects.get(ticker=ticker).currency
 
         return types.StockTransactionsValueHistory(history, transactions, currency)

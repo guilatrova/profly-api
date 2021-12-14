@@ -1,7 +1,7 @@
 import graphene
 from graphene_django import DjangoObjectType
 
-from savings.models import Stock, Transaction
+from savings.models import Stock, StockTransaction
 
 from .connections import CustomConnection
 
@@ -15,7 +15,7 @@ class StockType(DjangoObjectType):
 
 class TransactionType(DjangoObjectType):
     class Meta:
-        model = Transaction
+        model = StockTransaction
         filter_fields = {
             "stock__ticker": ["exact"],
             "performed_at": ["exact", "lte", "gte"],

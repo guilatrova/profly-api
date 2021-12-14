@@ -4,7 +4,7 @@ from rest_framework import serializers
 
 from markets.services import StocksMarketService
 
-from .models import Stock, Transaction
+from .models import Stock, StockTransaction
 
 market_service = StocksMarketService()
 logger = logging.getLogger(__name__)
@@ -18,7 +18,7 @@ class StockSerializer(serializers.ModelSerializer):
 
 class TransactionSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Transaction
+        model = StockTransaction
         exclude = ["stock"]
         read_only_fields = ["user"]
 

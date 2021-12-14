@@ -23,8 +23,11 @@ class Stock(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    class Meta:
+        db_table = "stocks"
 
-class Transaction(models.Model):
+
+class StockTransaction(models.Model):
     objects = managers.TransactionManager()
 
     stock = models.ForeignKey(Stock, on_delete=models.PROTECT)
@@ -48,4 +51,5 @@ class Transaction(models.Model):
         return float(self.strike_price) * self.units * modifier
 
     class Meta:
+        db_table = "stock_transactions"
         ordering = ["-performed_at"]

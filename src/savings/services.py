@@ -1,6 +1,6 @@
 import csv
 
-from .models import Transaction
+from .models import StockTransaction
 
 
 class TransactionsCSVDataFactory:
@@ -18,7 +18,7 @@ class TransactionsCSVDataFactory:
             ]
         )
 
-        for t in Transaction.objects.filter(user=user).prefetch_related("stock"):
+        for t in StockTransaction.objects.filter(user=user).prefetch_related("stock"):
             writer.writerow(
                 [
                     str(t.performed_at),
