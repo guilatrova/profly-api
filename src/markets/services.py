@@ -1,13 +1,13 @@
-from typing import Iterable, Optional
 import logging
+from typing import Iterable, Optional
 
 from savings.models import Stock
 
 from .adapters import YahooAdapter
 from .dtos import StockHistory, StockInfo
 
-
 logger = logging.getLogger(__name__)
+
 
 class StocksMarketService:
     def __init__(self, adapter=None):

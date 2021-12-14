@@ -9,7 +9,7 @@ logger = logging.getLogger(__name__)
 
 
 class YahooFactory:
-    """ Transforms yfinance responses into objects. """
+    """Transforms yfinance responses into objects."""
 
     def build_stock_info(self, payload: dict) -> StockInfo:
         mapping = {
