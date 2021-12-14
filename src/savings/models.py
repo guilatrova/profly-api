@@ -4,8 +4,12 @@ from django.utils import timezone
 
 from profly.models import MonetaryField
 
+from . import managers
+
 
 class Wallet(models.Model):
+    objects = managers.WalletManager()
+
     name = models.CharField(max_length=45, default="default")
     currency = models.CharField(max_length=10, default="USD")
 
@@ -21,6 +25,7 @@ class Wallet(models.Model):
 
 
 class SavingTransaction(models.Model):
+    objects = managers.SavingTransactionManager()
     wallet = models.ForeignKey(Wallet, on_delete=models.PROTECT)
 
     value = MonetaryField()

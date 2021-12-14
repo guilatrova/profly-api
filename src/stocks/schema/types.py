@@ -1,9 +1,8 @@
 import graphene
 from graphene_django import DjangoObjectType
 
+from profly.graphene_connections import CustomConnection
 from stocks.models import Stock, StockTransaction
-
-from .connections import CustomConnection
 
 
 class StockType(DjangoObjectType):
