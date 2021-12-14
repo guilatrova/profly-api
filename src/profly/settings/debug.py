@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     "graphene_django",
     "corsheaders",
     "stocks",
+    "savings",
 ]
 
 MIDDLEWARE = [

@@ -2,14 +2,9 @@ from django.conf import settings
 from django.db import models
 from django.utils import timezone
 
+from profly.models import MonetaryField
+
 from . import managers
-
-
-class MonetaryField(models.DecimalField):
-    def __init__(self, *args, **kwargs):
-        kwargs["max_digits"] = 19
-        kwargs["decimal_places"] = 10
-        super().__init__(*args, **kwargs)
 
 
 class Stock(models.Model):
