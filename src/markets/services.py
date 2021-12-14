@@ -1,7 +1,7 @@
 import logging
 from typing import Iterable, Optional
 
-from savings.models import Stock
+from stocks.models import Stock
 
 from .adapters import YahooAdapter
 from .dtos import StockHistory, StockInfo

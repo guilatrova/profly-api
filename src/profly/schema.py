@@ -1,13 +1,13 @@
 import graphene
 
-import savings.schema
+import stocks.schema
 
 
-class Query(savings.schema.Query, graphene.ObjectType):
+class Query(stocks.schema.Query, graphene.ObjectType):
     hello = graphene.String(default_value="Hi!")
 
 
-class Mutation(savings.schema.Mutation, graphene.ObjectType):
+class Mutation(stocks.schema.Mutation, graphene.ObjectType):
     pass
 
 

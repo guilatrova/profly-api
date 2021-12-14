@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     "django_filters",
     "graphene_django",
     "corsheaders",
-    "savings",
+    "stocks",
 ]
 
 MIDDLEWARE = [

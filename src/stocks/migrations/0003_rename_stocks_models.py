@@ -8,7 +8,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ("savings", "0002_extend_emotion_length"),
+        ("stocks", "0002_extend_emotion_length"),
     ]
 
     operations = [

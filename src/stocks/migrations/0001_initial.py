@@ -5,7 +5,7 @@ import django.utils.timezone
 from django.conf import settings
 from django.db import migrations, models
 
-import savings.models
+import stocks.models
 
 
 class Migration(migrations.Migration):
@@ -51,7 +51,7 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "strike_price",
-                    savings.models.MonetaryField(decimal_places=10, max_digits=19),
+                    stocks.models.MonetaryField(decimal_places=10, max_digits=19),
                 ),
                 ("units", models.FloatField()),
                 (
@@ -64,7 +64,7 @@ class Migration(migrations.Migration):
                 (
                     "stock",
                     models.ForeignKey(
-                        on_delete=django.db.models.deletion.PROTECT, to="savings.stock"
+                        on_delete=django.db.models.deletion.PROTECT, to="stocks.stock"
                     ),
                 ),
                 (

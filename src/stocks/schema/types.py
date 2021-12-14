@@ -1,7 +1,7 @@
 import graphene
 from graphene_django import DjangoObjectType
 
-from savings.models import Stock, StockTransaction
+from stocks.models import Stock, StockTransaction
 
 from .connections import CustomConnection
 

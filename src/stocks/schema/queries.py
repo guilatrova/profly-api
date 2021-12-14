@@ -5,7 +5,7 @@ from graphene_django.filter import DjangoFilterConnectionField
 from currencies.services import CurrencyRateService
 from markets.factories import ChartDataFactory
 from markets.services import StocksMarketService
-from savings.models import Stock, StockTransaction
+from stocks.models import Stock, StockTransaction
 
 from . import types
 

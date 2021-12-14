@@ -1,7 +1,7 @@
 from typing import Iterable
 
 from markets.dtos import OwnedStockSummary, StockHistory, StockUnitsByTicker
-from savings.models import StockTransaction
+from stocks.models import StockTransaction
 
 from .services import StocksMarketService
 
