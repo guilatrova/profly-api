@@ -10,7 +10,7 @@ class ModelQuery(graphene.ObjectType):
     wallet = graphene.Field(types.WalletType)
     saving_transactions = DjangoListField(types.SavingTransactionType)
 
-    def resolve_wallet(root, info, id):
+    def resolve_wallet(root, info):
         if info.context.user.is_anonymous:
             return None
 
