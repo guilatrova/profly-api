@@ -8,7 +8,7 @@ class Query(stocks.schema.Query, savings.schema.Query, graphene.ObjectType):
     hello = graphene.String(default_value="Hi!")
 
 
-class Mutation(stocks.schema.Mutation, graphene.ObjectType):
+class Mutation(stocks.schema.Mutation, savings.schema.Mutation, graphene.ObjectType):
     pass
 
 
