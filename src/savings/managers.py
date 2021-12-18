@@ -1,20 +1,19 @@
 from decimal import Decimal
 
 from django.db.models import Manager, Sum
-from django.db.models.functions import Coalesce
 
 DEFAULT_ZERO = Decimal(0)
 
 
 class SavingTransactionManager(Manager):
     def aggregate_wallet_current_value(self, wallet) -> Decimal:
-        aggregated = self.filter(wallet=wallet).annotate(
-            total_value=Coalesce(Sum("value"), DEFAULT_ZERO)
+        aggregated = (
+            self.filter(wallet=wallet)
+            .values("wallet")
+            .aggregate(total_value=Sum("value"))
         )
-        if instance := aggregated.first():
-            return instance.total_value
 
-        return DEFAULT_ZERO
+        return aggregated["total_value"]
 
 
 class WalletManager(Manager):
