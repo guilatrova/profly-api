@@ -15,9 +15,6 @@ class SavingTransactionSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data: dict):
         user = self.context["request"].user
-        from django.contrib.auth.models import User
-
-        user = User.objects.first()
         validated_data["wallet"] = Wallet.objects.get_default_wallet(user)
 
         logger.info(f"Creating saving transaction with data: {validated_data}")
