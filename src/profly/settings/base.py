@@ -25,7 +25,7 @@ SECRET_KEY = "!@^(4pb!ft^j2k1)plb=lhfzg(1%307#1@we+#9ae9cqdj2_(^"
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["localhost", "production.eba-uuabaxms.us-west-2.elasticbeanstalk.com"]
+ALLOWED_HOSTS = ["*"]
 CORS_ORIGIN_ALLOW_ALL = True
 
 
