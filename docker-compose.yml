@@ -1,0 +1,35 @@
+version: "3.9"
+
+services:
+  profly_db:
+    # Ensure this version matches AWS
+    image: postgres:10
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - profly_db_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  api:
+    build: .
+    image: guilatrova/profly_api
+    container_name: profly_api
+    volumes:
+      - ./src/:/app/
+    ports:
+      - "8080:8080"
+    environment:
+      - COMMIT_HASH=local
+      - DJANGO_SETTINGS_MODULE=profly.settings.local
+      - DB_NAME=postgres
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=postgres
+      - DB_HOSTNAME=profly_db
+    depends_on:
+      - profly_db
+
+volumes:
+  profly_db_data: null
