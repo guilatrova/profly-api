@@ -1,13 +1,12 @@
 import logging
 
-from django.conf import settings
-from django.contrib.auth.models import User
-from rest_framework.authentication import BaseAuthentication
-
 import requests
 from cachetools.func import ttl_cache
+from django.conf import settings
+from django.contrib.auth.models import User
 from jose import exceptions as jose_exceptions
 from jose import jwt
+from rest_framework.authentication import BaseAuthentication
 
 from . import exceptions
 
@@ -61,9 +60,7 @@ class CognitoAuthentication(BaseAuthentication):
 
         key = cls._get_exponant_and_modulus(jwks, kid, algorithm)
 
-        jwt.decode(
-            token, key, issuer=iss, audience=aud, options={"verify_at_hash": False}
-        )
+        jwt.decode(token, key, issuer=iss, audience=aud, options={"verify_at_hash": False})
 
         return unverified_body
 
@@ -81,9 +78,7 @@ class CognitoAuthentication(BaseAuthentication):
         except exceptions.AuthenticationNoRSAException as e:
             raise exceptions.AuthenticationUnableToParseJWTException() from e
         except Exception as e:
-            logger.exception(
-                "Unknown exception captured during the verify of jwt token"
-            )
+            logger.exception("Unknown exception captured during the verify of jwt token")
             raise exceptions.AuthenticationUnableToParseJWTException() from e
 
         return token, body

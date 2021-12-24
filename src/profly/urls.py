@@ -15,7 +15,6 @@ Including another URLconf
 """
 from django.conf import settings
 from django.urls import path
-
 from graphene_django.views import GraphQLView
 
 from stocks.views import transactions_as_csv_view

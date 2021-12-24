@@ -2,6 +2,7 @@ import logging
 from typing import Iterable, Optional
 
 import yfinance
+from pandas.core.series import Series
 
 from markets.dtos import StockHistory, StockInfo
 
@@ -23,17 +24,17 @@ class YahooFactory:
         for to_prop, from_prop in mapping.items():
             data[to_prop] = payload.get(from_prop)
 
-        return StockInfo(**data)
+        return StockInfo(**data)  # type: ignore
 
-    def build_stock_history(self, ticker: str, payload: dict) -> Iterable[StockHistory]:
+    def build_stock_history(self, ticker: str, payload: Series) -> Iterable[StockHistory]:
         for date, values in payload.iterrows():
-            yield StockHistory(
-                ticker, date, values["Open"], values["High"], values["Close"]
-            )
+            yield StockHistory(ticker, date, values["Open"], values["High"], values["Close"])
 
-    def get_last_close_price(self, history: Iterable[StockHistory]) -> float:
+    def get_last_close_price(self, history: Iterable[StockHistory]) -> Optional[float]:
         for entry in history:
             return entry.close
+
+        return None
 
 
 class YahooAdapter:
@@ -45,32 +46,33 @@ class YahooAdapter:
     def __init__(self):
         self.factory = YahooFactory()
 
-    def get_stock_info(self, ticker_symbol: str) -> Optional[StockInfo]:
+    def get_stock_info(self, ticker_symbol: str) -> StockInfo:
         try:
             info = yfinance.Ticker(ticker_symbol).info
             logger.info(f"Got info: {info}")
         except Exception:
             logger.exception(f"Unable to get ticker '{ticker_symbol}'")
+            raise
         else:
             return self.factory.build_stock_info(info)
 
-    def get_history(
-        self, ticker_symbol: str, period: str, interval: str
-    ) -> Iterable[StockHistory]:
+    def get_history(self, ticker_symbol: str, period: str, interval: str) -> Iterable[StockHistory]:
         try:
             history = yfinance.Ticker(ticker_symbol).history(period, interval)
             logger.info(f"Got history: {history}")
         except Exception:
             logger.exception(f"Unable to get ticker '{ticker_symbol}'")
+            return []
         else:
             return self.factory.build_stock_history(ticker_symbol, history)
 
-    def get_last_price(self, ticker_symbol: str) -> float:
+    def get_last_price(self, ticker_symbol: str) -> Optional[float]:
         try:
             history = yfinance.Ticker(ticker_symbol).history("1d")
             logger.info(f"Got history: {history}")
         except Exception:
             logger.exception(f"Unable to get ticker '{ticker_symbol}'")
+            return None
         else:
             stock_history = self.factory.build_stock_history(ticker_symbol, history)
             return self.factory.get_last_close_price(stock_history)

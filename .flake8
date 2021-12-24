@@ -1,0 +1,7 @@
+[flake8]
+max-line-length=120
+extend-ignore=E203
+exclude=
+    __init__.py
+    admin.py
+    */profly/settings/*

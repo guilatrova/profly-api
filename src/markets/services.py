@@ -23,7 +23,7 @@ class StocksMarketService:
                 logo_url=info.logo_url,
             )
 
-    def _get_stock_info_from_source(self, ticker_symbol: str) -> Optional[StockInfo]:
+    def _get_stock_info_from_source(self, ticker_symbol: str) -> StockInfo:
         return self.adapter.get_stock_info(ticker_symbol)
 
     def get_stock(self, ticker_symbol: str) -> Optional[Stock]:
@@ -47,11 +47,7 @@ class StocksMarketService:
         else:
             price = self.adapter.get_last_price(ticker_symbol)
 
-        return StockInfo(
-            stock.name, stock.ticker, stock.currency, price, stock.logo_url
-        )
+        return StockInfo(stock.name, stock.ticker, stock.currency, price, stock.logo_url)
 
-    def get_history(
-        self, ticker_symbol: str, period: str = "1d", interval: str = "1d"
-    ) -> Iterable[StockHistory]:
+    def get_history(self, ticker_symbol: str, period: str = "1d", interval: str = "1d") -> Iterable[StockHistory]:
         return self.adapter.get_history(ticker_symbol, period, interval)

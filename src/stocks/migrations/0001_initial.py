@@ -63,9 +63,7 @@ class Migration(migrations.Migration):
                 ("notes", models.CharField(max_length=255, null=True)),
                 (
                     "stock",
-                    models.ForeignKey(
-                        on_delete=django.db.models.deletion.PROTECT, to="stocks.stock"
-                    ),
+                    models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to="stocks.stock"),
                 ),
                 (
                     "user",

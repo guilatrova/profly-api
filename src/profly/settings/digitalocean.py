@@ -5,7 +5,7 @@ from django.core.management.utils import get_random_secret_key
 
 import dj_database_url
 
-from .debug import *
+from .base import *
 
 # STATIC FILES
 STATIC_ROOT = BASE_DIR / "staticfiles"

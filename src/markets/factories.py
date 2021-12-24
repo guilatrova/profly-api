@@ -23,13 +23,9 @@ class ChartDataFactory:
             ticker = units_by_ticker["ticker"]
             close_price = self._get_ticker_close_price(ticker)
 
-            yield StockUnitsByTicker(
-                ticker, name, logo_url, units_by_ticker["total_units"], close_price
-            )
+            yield StockUnitsByTicker(ticker, name, logo_url, units_by_ticker["total_units"], close_price)
 
-    def build_stock_line_factory(
-        self, ticker_symbol: str, period: str, interval: str
-    ) -> Iterable[StockHistory]:
+    def build_stock_line_factory(self, ticker_symbol: str, period: str, interval: str) -> Iterable[StockHistory]:
         """
         period: data period to download (either use period parameter or use start and
         end) Valid periods are:
@@ -43,9 +39,7 @@ class ChartDataFactory:
         return self.market_service.get_history(ticker_symbol, period, interval)
 
     def build_owned_stock_summary(self, user, ticker_symbol: str) -> OwnedStockSummary:
-        avg_data = StockTransaction.objects.aggregate_avg_units_price_by_ticker(
-            user
-        ).get(ticker=ticker_symbol)
+        avg_data = StockTransaction.objects.aggregate_avg_units_price_by_ticker(user).get(ticker=ticker_symbol)
         total_units = avg_data["total_units"]
         close_price = self._get_ticker_close_price(ticker_symbol)
         current_value = close_price * total_units

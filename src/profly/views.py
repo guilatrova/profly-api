@@ -2,11 +2,10 @@ import json
 import os
 
 from django.http import HttpResponse
+from graphene_django.views import GraphQLView
 from rest_framework import status
 from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.permissions import IsAuthenticated
-
-from graphene_django.views import GraphQLView
 
 from authentication import CognitoAuthentication
 from authentication.exceptions import AuthenticationException

@@ -1,0 +1,87 @@
+[tool.poetry]
+name = "profly-api"
+version = "0.1.0"
+description = ""
+authors = ["Guilherme Latrova <hello@guilatrova.dev>"]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+Django = "3.2"
+djangorestframework = "3.12.2"
+django-cors-headers = "3.6.0"
+django-filter = "2.4.0"
+graphene = "2.1.8"
+graphene-django = "2.14.0"
+python-jose = "^3.3.0" # authentication package
+gunicorn = "20.0.4"
+dj-database-url = "0.5.0"
+psycopg2-binary = "^2.9.2"
+cachetools = "^5.0.0"
+yfinance = "^0.1.67"
+
+[tool.poetry.dev-dependencies]
+rich = "^10.16.1"
+black = "^21.12b0"
+flake8 = "^4.0.1"
+isort = "^5.10.1"
+pre-commit = "^2.16.0"
+mypy = "^0.930"
+types-cachetools = "^4.2.6"
+types-requests = "^2.26.2"
+
+[tool.black]
+line-length = 120
+
+[tool.isort]
+profile = "black"
+line_length = 120
+extra_standard_library = ["pytest"]
+sections=["STDLIB", "DJANGO", "THIRDPARTY", "FIRSTPARTY", "LOCALFOLDER"]
+known_django=["django", "rest_framework", "graphene"]
+known_third_party=["requests", "factory", "faker", "callee", "pytz"]
+
+[tool.mypy]
+python_version = 3.9
+ignore_missing_imports = true
+
+[tool.pytest]
+junit_family = "xunit2"
+DJANGO_SETTINGS_MODULE = "profly.settings.debug"
+python_files = "test_*.py"
+testpaths = "tests"
+addopts = ["--strict-markers"]
+
+[tool.coverage.run]
+omit= [
+    "*/__init__.py",
+    "**/migrations/*",
+    "src/tests/*",
+    "src/profly/settings/*",
+    "src/profly/*sgi.py",
+    "src/manage.py",
+    "**/apps.py"
+]
+
+[tool.coverage.report]
+fail_under = 0
+show_missing = true
+omit = [
+    "build/*",
+    "tests/*",
+    "setup.py",
+    "*/__init__.py",
+    "*/nose/*",
+    "*/pkg_resources/*",
+    "*/six.py",
+    "*/nose2/*",
+    "*/coverage/*",
+    "*/cov_core.py"
+]
+
+[tool.tryceratops]
+exclude = ["src/manage.py", "src/profly/settings/"]
+
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

@@ -111,10 +111,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        "NAME": (
-            "django.contrib.auth.password_validation."
-            "UserAttributeSimilarityValidator"
-        ),
+        "NAME": ("django.contrib.auth.password_validation." "UserAttributeSimilarityValidator"),
     },
     {
         "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
@@ -161,7 +158,4 @@ REST_FRAMEWORK = {
     ],
 }
 
-COGNITO_JWKS_URL = (
-    "https://cognito-idp.us-east-1.amazonaws.com/"
-    "us-east-1_E623hvSU9/.well-known/jwks.json"
-)
+COGNITO_JWKS_URL = "https://cognito-idp.us-east-1.amazonaws.com/" "us-east-1_E623hvSU9/.well-known/jwks.json"
