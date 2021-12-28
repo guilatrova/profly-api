@@ -30,7 +30,8 @@ COPY src/ /app/
 ARG COMMIT_HASH
 ENV COMMIT_HASH=$COMMIT_HASH
 
-CMD ["gunicorn",  "profly.wsgi", "--bind", ":8080", "--worker-class", "gevent", "--worker-connections", "300", "--workers", "3"]
+# CMD ["gunicorn",  "profly.wsgi", "--bind", ":8080", "--worker-class", "gevent", "--worker-connections", "300", "--workers", "3"]
+CMD ["bash", "-c", "python manage.py migrate && gunicorn profly.wsgi --bind :8080 --worker-class gevent --worker-connections 300 --workers 3"]
 
 FROM prod as dev
 
