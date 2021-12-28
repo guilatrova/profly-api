@@ -38,10 +38,14 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    # Third Party
     "rest_framework",
     "django_filters",
     "graphene_django",
     "corsheaders",
+    "health_check",
+    "health_check.db",
+    # Custom
     "stocks",
     "savings",
 ]

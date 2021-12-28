@@ -14,7 +14,8 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.conf import settings
-from django.urls import path
+from django.urls import include, path
+
 from graphene_django.views import GraphQLView
 
 from stocks.views import transactions_as_csv_view
@@ -23,7 +24,7 @@ from . import views as core_views
 
 urlpatterns = [
     path("", core_views.index),
-    path("graphql/", core_views.PrivateGraphQLView.as_view(graphiql=settings.DEBUG)),
+    path("health/", include("health_check.urls")),
     path("csv/", transactions_as_csv_view),
 ]
 
