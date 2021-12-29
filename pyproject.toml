@@ -21,6 +21,7 @@ yfinance = "^0.1.67"
 django-health-check = "^3.16.5"
 gevent = "^21.12.0"
 python-json-logger = "^2.0.2"
+beautifulsoup4 = "^4.10.0"
 
 [tool.poetry.dev-dependencies]
 rich = "^10.16.1"
