@@ -1,12 +1,13 @@
 import logging
 
-import requests
-from cachetools.func import ttl_cache
 from django.conf import settings
 from django.contrib.auth.models import User
+from rest_framework.authentication import BaseAuthentication
+
+import requests
+from cachetools.func import ttl_cache
 from jose import exceptions as jose_exceptions
 from jose import jwt
-from rest_framework.authentication import BaseAuthentication
 
 from . import exceptions
 
@@ -88,7 +89,7 @@ class CognitoAuthentication(BaseAuthentication):
         """
         Payload example: {
             'sub': 'c6042a21-0227-45aa-aee1-e0f0630a43da',
-            'aud': '504u8p26uld4jq484htcu8flov',
+            'aud': '5i776ar7vea6j2hmg49npgk20i',
             'email_verified': True,
             'event_id': 'e774c736-1e38-4d66-b8d6-175116e43d23',
             'token_use': 'id',

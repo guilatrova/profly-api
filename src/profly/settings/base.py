@@ -162,4 +162,8 @@ REST_FRAMEWORK = {
     ],
 }
 
-COGNITO_JWKS_URL = "https://cognito-idp.us-east-1.amazonaws.com/" "us-east-1_E623hvSU9/.well-known/jwks.json"
+# Cognito
+
+COGNITO_REGION = "us-east-1"
+COGNITO_POOL_ID = "us-east-1_nZrhNdcZO"
+COGNITO_JWKS_URL = f"https://cognito-idp.{COGNITO_REGION}.amazonaws.com/{COGNITO_POOL_ID}/.well-known/jwks.json"
