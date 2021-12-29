@@ -25,6 +25,7 @@ from . import views as core_views
 urlpatterns = [
     path("", core_views.index),
     path("health/", include("health_check.urls")),
+    path("graphql/", core_views.PrivateGraphQLView.as_view(graphiql=False)),
     path("csv/", transactions_as_csv_view),
 ]
 
