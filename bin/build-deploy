@@ -15,8 +15,10 @@ export AWS_PROFILE=profly
 
 aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 209126671129.dkr.ecr.us-east-1.amazonaws.com
 
-docker tag profly_api:latest 209126671129.dkr.ecr.us-east-1.amazonaws.com/profly_api:latest
+docker tag profly_api:latest "209126671129.dkr.ecr.us-east-1.amazonaws.com/profly_api:latest"
+docker tag profly_api:latest "209126671129.dkr.ecr.us-east-1.amazonaws.com/profly_api:${HASH}"
 
-docker push 209126671129.dkr.ecr.us-east-1.amazonaws.com/profly_api:latest
+docker push "209126671129.dkr.ecr.us-east-1.amazonaws.com/profly_api:latest"
+docker push "209126671129.dkr.ecr.us-east-1.amazonaws.com/profly_api:${HASH}"
 
 echo -e "Image pushed to ECR, you still need to update the ECS task"
