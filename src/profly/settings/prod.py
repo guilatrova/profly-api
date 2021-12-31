@@ -4,7 +4,7 @@ from django.core.management.utils import get_random_secret_key
 
 from .base import *
 
-DEBUG = True  # TODO: Change before release
+DEBUG = False
 SECRET_KEY = get_random_secret_key()
 
 DATABASES = {
@@ -60,14 +60,17 @@ LOGGING = {
     },
     # fmt: off
     "loggers": {
+        "markets": {"level": "DEBUG"},
+        "savings": {"level": "DEBUG"},
         "profly": {"level": "DEBUG"},
+        "authentication": {"level": "DEBUG"},
     },
     # fmt: on
     "root": {"level": "INFO", "handlers": ["json"]},
 }
 
 # NETWORK & CORS
-ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", "127.0.0.1,localhost,*").split(",")
+ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", "*").split(",")
 
 CORS_ORIGIN_ALLOW_ALL = False
 CORS_ORIGIN_WHITELIST = (
