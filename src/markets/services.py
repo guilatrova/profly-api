@@ -1,10 +1,13 @@
 import logging
 from typing import Iterable, Optional
 
+from retry import retry
+
 from stocks.models import Stock
 
 from .adapters import YahooAdapter
 from .dtos import StockHistory, StockInfo
+from .exceptions import UnableToGetHistory
 
 logger = logging.getLogger(__name__)
 
@@ -49,5 +52,6 @@ class StocksMarketService:
 
         return StockInfo(stock.name, stock.ticker, stock.currency, price, stock.logo_url)
 
+    @retry(exceptions=UnableToGetHistory, tries=3, jitter=0.5, logger=logger)
     def get_history(self, ticker_symbol: str, period: str = "1d", interval: str = "1d") -> Iterable[StockHistory]:
         return self.adapter.get_history(ticker_symbol, period, interval)

@@ -5,6 +5,7 @@ import yfinance
 from pandas.core.series import Series
 
 from markets.dtos import StockHistory, StockInfo
+from markets.exceptions import UnableToGetHistory
 
 logger = logging.getLogger(__name__)
 
@@ -60,9 +61,9 @@ class YahooAdapter:
         try:
             history = yfinance.Ticker(ticker_symbol).history(period, interval)
             logger.info(f"Got history: {history}")
-        except Exception:
+        except Exception as e:
             logger.exception(f"Unable to get ticker '{ticker_symbol}'")
-            return []
+            raise UnableToGetHistory(ticker_symbol) from e
         else:
             return self.factory.build_stock_history(ticker_symbol, history)
 
@@ -70,9 +71,9 @@ class YahooAdapter:
         try:
             history = yfinance.Ticker(ticker_symbol).history("1d")
             logger.info(f"Got history: {history}")
-        except Exception:
+        except Exception as e:
             logger.exception(f"Unable to get ticker '{ticker_symbol}'")
-            return None
+            raise UnableToGetHistory(ticker_symbol) from e
         else:
             stock_history = self.factory.build_stock_history(ticker_symbol, history)
             return self.factory.get_last_close_price(stock_history)
