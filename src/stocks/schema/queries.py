@@ -1,4 +1,5 @@
 import graphene
+
 from graphene_django import DjangoListField
 from graphene_django.filter import DjangoFilterConnectionField
 
@@ -81,8 +82,12 @@ class ChartDataQuery(graphene.ObjectType):
 
     def resolve_stock_transactions_value_history(root, info, ticker, period, interval):
         history = list(data_factory.build_stock_line_factory(ticker, period, interval))
-        transactions = StockTransaction.objects.filter(stock__ticker=ticker)
         currency = Stock.objects.get(ticker=ticker).currency
+
+        if info.context.user.is_anonymous:
+            transactions = []
+        else:
+            transactions = StockTransaction.objects.filter(stock__ticker=ticker, user=info.context.user)
 
         return types.StockTransactionsValueHistory(history, transactions, currency)
 
